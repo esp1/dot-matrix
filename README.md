@@ -261,5 +261,5 @@ MD_MAX72XX matrix(
 ![enclosure image 2](doc/images/enclosure2.jpeg)
 
 Here are files to 3D print an enclosure for the LED matrix:
--   cover.3mf
--   base.3mf
+-   ![cover.3mf](doc/3d/cover.3mf)
+-   ![base.3mf](doc/3d/base.3mf)
