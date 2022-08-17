@@ -189,7 +189,7 @@ void loop() {
       [r7, c31]    24       16       8     [r7, c0]
 ```
 
-![wiring diagram](doc/images/wiring diagram.png)
+![wiring diagram](doc/images/wiring_diagram.png)
 
 ## Code
 -   Install [MD_MAX72XX](https://majicdesigns.github.io/MD_MAX72XX/index.html "https://majicdesigns.github.io/MD_MAX72XX/index.html") library
@@ -256,9 +256,9 @@ MD_MAX72XX matrix(
 
 # 3D Printed Enclosure
 
-![enclosure image 1](doc/images/enclosure 1.jpeg)
+![enclosure image 1](doc/images/enclosure1.jpeg)
 
-![enclosure image 2](doc/images/enclosure 2.jpeg)
+![enclosure image 2](doc/images/enclosure2.jpeg)
 
 Here are files to 3D print an enclosure for the LED matrix:
 -   cover.3mf
