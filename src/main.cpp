@@ -1,53 +1,35 @@
-#include <Arduino.h>
-#include <LittleFS.h>
-#include "matrix.h"
-#include "matrix_state.h"
+#include "config.h"
+#include "led_matrix.h"
+#include "render.h"
+#include "types.h"
+#include "web_server.h"
 #include "wifi_connect.h"
+#include <ESPAsyncWebServer.h>
 
-using namespace tint_matrix;
-using namespace std::placeholders;
-
-const auto num_matrix_modules = 4;
-
-Matrix matrix{num_matrix_modules};
-MatrixState *state = new MatrixState{matrix.display_width(), std::bind(&Matrix::char_gfx, &matrix, _1)};
-
+MD_MAX72XX matrix(MD_MAX72XX::FC16_HW,
+                  15,                    // CS
+                  NUM_LED_MATRIX_MODULES // # of devices
+);
+MatrixState state(&matrix);
 AsyncWebServer server(80);
 
-uint16_t loop_delay = 100;
-
-void setup()
-{
+void setup() {
   Serial.begin(115200);
+
   Serial.println();
   Serial.println("TINT Matrix");
   Serial.println();
 
-  LittleFS.begin();
-
-  wifi_connect::setup(&server, &matrix, state);
-
-  // Application content
-  server.serveStatic("/", LittleFS, "/web/app/").setDefaultFile("index.html").setFilter(ON_STA_FILTER);
-
-  server.on("/matrix", [](auto *req)
-            {
-              if (req->hasParam("text"))
-              {
-                state = matrix.update(state->clear()->reset_column_offset());
-                state = state->text(req->getParam("text")->value().c_str());
-              }
-              req->redirect("/");
-            })
-      .setFilter(ON_STA_FILTER);
+  led_matrix::setup(&matrix);
+  web_server::setup(&server, &state);
+  wifi_connect::setup(&server);
 
   server.begin();
 }
 
-void loop()
-{
-  state = wifi_connect::loop(&matrix, state);
+void loop() {
+  wifi_connect::loop(&state);
+  render::update_display(&state);
 
-  state = matrix.update(state);
-  delay(loop_delay);
+  delay(LOOP_DELAY_MSEC);
 }
