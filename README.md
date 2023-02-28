@@ -216,9 +216,10 @@ MD_MAX72XX matrix(
 -   Upload firmware
 -   Upload filesystem image
     -   `PlatformIO` -> `Project Tasks` -> `nodemcuv2` -> `Platform` -> `Upload Filesystem Image`
+    -   If you have problems, close any other processes that may be using the serial port, e.g. Serial Monitor
 
 ### Initial setup
--   Matrix should display `setup`
+-   Matrix should display `dot matrix`
 -   Open Serial Monitor
 -   Connect to the `dot matrix` wifi network with your phone
 -   The captive portal wifi settings page will appear
@@ -243,8 +244,8 @@ MD_MAX72XX matrix(
     -   `req->redirect()`
 
 ### loop()
--   `matrix.update(state)`
--   `delay(loop_delay)`
+-   `render::update_display(&state)`
+-   `delay(LOOP_DELAY_MSEC)`
 
 ## Testing firmware
 -   Put tests in `test` dir
