@@ -1,6 +1,7 @@
 #include "wifi_connect.h"
 #include "captive_portal.h"
 #include "render.h"
+#include "web_server.h"
 #include "wifi_config.h"
 #include <EEPROM.h>
 #include <ESP8266WiFi.h>
@@ -25,11 +26,11 @@ void connect_wifi(MatrixState *const state) {
   WiFi.begin(ssid, password);
 
   if (WiFi.waitForConnectResult() != WL_CONNECTED) {
-    Serial.println("Failed connection attempt");
+    Serial.println("Failed to connect to '" + ssid + "'");
     ssid.clear();
     password.clear();
   } else {
-    Serial.println("Connected! IP address: " + WiFi.localIP().toString());
+    Serial.println("Connected to '" + ssid + "' with IP address: " + WiFi.localIP().toString());
     render::scroll_text(state, WiFi.localIP().toString());
 
     wifi_config::save(ssid, password);
@@ -46,14 +47,25 @@ void setup(AsyncWebServer *const server) {
   ssid = wifi_config->ssid;
   password = wifi_config->password;
 
-  captive_portal::setup(server, [](auto *req) {
+  web_server::on(server, "/setup", [](auto *req) {
+    wifi_connected = false;
+
     ssid = req->getParam("wifi-ssid")->value().c_str();
     password = req->getParam("wifi-password")->value().c_str();
+
+    req->redirect("/");
   });
 }
 
 void loop(MatrixState *const state) {
   if (!wifi_connected) {
+    if (WiFi.isConnected()) {
+      Serial.println("Disconnecting from '" + WiFi.SSID() + "'");
+      WiFi.disconnect();
+      Serial.println(WiFi.isConnected() ? "connected" : "disconnected");
+      Serial.println("wifi_connected = false");
+    }
+
     if (ssid.isEmpty()) {
       captive_portal::loop(state);
     } else {

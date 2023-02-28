@@ -15,14 +15,6 @@ DNSServer dnsServer;
 
 } // namespace
 
-void setup(AsyncWebServer *const server, ArRequestHandlerFunction callback) {
-  // Access point mode (Captive portal)
-  server->serveStatic("/", LittleFS, "/web/captive_portal/")
-      .setFilter(ON_AP_FILTER);
-
-  server->on("/setup", callback).setFilter(ON_AP_FILTER);
-}
-
 void loop(MatrixState *const state) {
   if (!captive_portal_initialized) {
     Serial.println("Starting '" + CAPTIVE_PORTAL_SSID +
@@ -33,8 +25,7 @@ void loop(MatrixState *const state) {
 
     dnsServer.start(53, "*", WiFi.softAPIP());
 
-    render::text(state, "setup", ALIGN_CENTER);
-    render::update_display(state);
+    render::scroll_text(state, "dot matrix");
 
     captive_portal_initialized = true;
   } else {

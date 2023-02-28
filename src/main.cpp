@@ -17,7 +17,7 @@ void setup() {
   Serial.begin(115200);
 
   Serial.println();
-  Serial.println("TINT Matrix");
+  Serial.println("Dot Matrix");
   Serial.println();
 
   led_matrix::setup(&matrix);

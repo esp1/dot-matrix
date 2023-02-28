@@ -8,9 +8,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
   LittleFS.begin();
 
   // Station mode
-  server->serveStatic("/", LittleFS, "/web/app/")
-      .setDefaultFile("index.html")
-      .setFilter(ON_STA_FILTER);
+  server->serveStatic("/", LittleFS, "/web/").setDefaultFile("index.html");
 
   server->on("/matrix", [state](auto *req) {
     if (req->hasParam("text")) {
@@ -25,6 +23,11 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
       req->redirect("http://" + WiFi.softAPIP().toString() + "/index.html");
     }
   });
+}
+
+void on(AsyncWebServer *const server, const char *uri,
+        ArRequestHandlerFunction callback) {
+  server->on(uri, callback);
 }
 
 } // namespace web_server

@@ -11,7 +11,7 @@
 /**
  * @brief The name to use for the captive portal wifi network.
  */
-const String CAPTIVE_PORTAL_SSID = "TINT Matrix";
+const String CAPTIVE_PORTAL_SSID = "dot matrix";
 
 /**
  * @brief Number of milliseconds to delay in the main loop.

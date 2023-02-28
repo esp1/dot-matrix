@@ -208,8 +208,8 @@ MD_MAX72XX matrix(
 
 ---
 
-# TINT Matrix
--   [Factual/tint-matrix](https://github.com/factual/tint-matrix)
+# Dot Matrix
+-   [esp1/dot-matrix](https://github.com/factual/dot-matrix)
 
 ## Try it
 -   Build firmware
@@ -220,9 +220,10 @@ MD_MAX72XX matrix(
 ### Initial setup
 -   Matrix should display `setup`
 -   Open Serial Monitor
--   Connect to `TINT Matrix` wifi network with your phone
--   TINT Matrix captive portal wifi settings page will appear
--   Enter your wifi settings and submit
+-   Connect to the `dot matrix` wifi network with your phone
+-   The captive portal wifi settings page will appear
+-   Enter text into the text box to see it show up on the LED display
+-   Enter your wifi settings at the bottom of the page to have the Dot Matrix display connect to your wifi network instead of starting a captive portal
 
 ### Normal operation
 -   Matrix should display `-> wifi` and it will attempt to connect to your wifi network
@@ -233,7 +234,7 @@ MD_MAX72XX matrix(
 
 ## Code anatomy
 ### setup()
--   `server.serveStatic("/", LittleFS, "/web/app/")`
+-   `server.serveStatic("/", LittleFS, "/web/")`
     -   `data` directory
 -   `server.on(url, callback)`
     -   `req->hasParam()`
@@ -250,7 +251,7 @@ MD_MAX72XX matrix(
 -   Run `PlatformIO: Test` command
 
 ## Updating web application code
--   Put web application code in `data/www/app`
+-   Put web application code in `data/web/`
 
 ---
 
