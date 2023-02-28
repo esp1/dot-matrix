@@ -12,8 +12,8 @@ WifiConfig eeprom_wifi_config;
 void setup() {
   EEPROM.begin(512);
   EEPROM.get(0, eeprom_wifi_config);
-  Serial.printf("wifi config ssid: '%s', password: '%s'\n",
-                eeprom_wifi_config.ssid, eeprom_wifi_config.password);
+  // Serial.printf("wifi config ssid: '%s', password: '%s'\n",
+  //               eeprom_wifi_config.ssid, eeprom_wifi_config.password);
 }
 
 WifiConfig *get() { return &eeprom_wifi_config; }
