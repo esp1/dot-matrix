@@ -788,6 +788,16 @@ video {
 }
 
 @media (min-width: 1024px) {
+  .lg\:my-10 {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .lg\:my-12 {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
   .lg\:px-4 {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -822,6 +832,11 @@ video {
 }
 
 @media (min-width: 1536px) {
+  .\32xl\:my-16 {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+
   .\32xl\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
