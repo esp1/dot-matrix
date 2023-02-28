@@ -12,17 +12,31 @@ void scroll_horizontal(MatrixState *const state, bool scroll_left) {
   auto graphics = *(state->graphics);
 
   if (state->column_offset >= display_width + graphics_width) {
+    // graphics have scrolled off of the display
+    // reset the column offset to loop
     state->column_offset = 0;
-  }
-
-  if (state->column_offset < display_width + graphics_width) {
+  } else {
+    // shift the display
     matrix->transform(scroll_left ? MD_MAX72XX::TSL : MD_MAX72XX::TSR);
-    led_matrix::set_column(
-        matrix, scroll_left ? 0 : display_width - 1,
-        state->column_offset < graphics_width
-            ? graphics[scroll_left ? state->column_offset
-                                   : graphics_width - 1 - state->column_offset]
-            : 0);
+
+    // bring in data from the graphics buffer to fill the newly vacated column
+    // on the edge of the display
+    auto display_col = scroll_left ? 0                  // right edge
+                                   : display_width - 1; // left edge
+
+    auto graphics_idx =
+        scroll_left
+            ? state->column_offset                       // index from left
+            : graphics_width - 1 - state->column_offset; // index from right
+
+    auto col_value =
+        state->column_offset < graphics.size()
+            ? graphics[graphics_idx] // index within graphics buffer
+            : 0; // index outside graphics buffer (blank column)
+
+    led_matrix::set_column(matrix, display_col, col_value);
+
+    // increment the column offset
     state->column_offset++;
   }
 }
@@ -74,7 +88,8 @@ void text(MatrixState *const state, String str, Alignment alignment) {
   align(state, alignment);
 }
 
-void scroll_text(MatrixState *const state, String str, ScrollDirection scroll_dir) {
+void scroll_text(MatrixState *const state, String str,
+                 ScrollDirection scroll_dir) {
   text(state, str);
   state->scroll_dir = scroll_dir;
 }
