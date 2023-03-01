@@ -13,20 +13,24 @@
     </h1>
     <form class="flex justify-center items-center" action="/matrix">
       <input class="border rounded p-1 bg-black" type="text" id="text" name="text" autofocus />
-      <input class="ml-8 my-8 lg:my-10 rounded px-3.5 py-1.5 md:px-4 lg:px-5 xl:px-5.5 2xl:px-6 bg-red-600 text-black hover:scale-105 active:scale-105 active:bg-black active:text-red-600" type="submit" value="&#10140;" />
+      <input
+        class="ml-8 my-8 lg:my-10 rounded px-3.5 py-1.5 md:px-4 lg:px-5 xl:px-5.5 2xl:px-6 bg-red-600 text-black hover:scale-105 active:scale-105 active:bg-black active:text-red-600"
+        type="submit" value="&#10140;" />
     </form>
   </div>
 
   <form
     class="opacity-20 hover:opacity-100 absolute bottom-0 right-0 p-4 flex justify-center items-center text-gray-300"
-    action="/setup" onsubmit="return Boolean(document.getElementById('wifi-ssid').value.trim());">
+    action="/setup">
     <h2 class="cursor-default select-none mr-4 font-bold text-2xl">wifi</h2>
     <input class="mx-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" type="text" id="wifi-ssid"
       name="wifi-ssid" placeholder="SSID" autofocus autocomplete="off" autocorrect="off" autocapitalize="off"
       spellcheck="false" />
     <input class="mx-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" type="password"
       id="wifi-password" name="wifi-password" placeholder="password" />
-    <input class="m-2 rounded px-2 bg-gray-300 font-bold text-3xl text-black hover:scale-105 active:scale-105 active:bg-black active:text-gray-300" type="submit" value="&#10003;" />
+    <input
+      class="m-2 rounded px-2 bg-gray-300 font-bold text-3xl text-black hover:scale-105 active:scale-105 active:bg-black active:text-gray-300"
+      type="submit" value="&#10003;" />
   </form>
 </body>
 
