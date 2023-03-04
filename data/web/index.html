@@ -6,12 +6,11 @@
   <link rel="stylesheet" href="styles.css" />
 
   <script>
-    const submitForm = (form, url) =>
+    const fetchForm = (form, url) =>
       fetch(url, {
         method: "POST",
         body: new FormData(form)
       })
-
   </script>
 </head>
 
@@ -20,34 +19,41 @@
     <h1 class="rounded pl-4 pt-12 pb-4 bg-red-600 font-bold text-black">
       dot matrix
     </h1>
+    
     <form id="matrix-text" class="flex justify-center items-center" onsubmit="
-      submitForm(this, 'matrix-text')
-      this.reset()
-      return false
-    ">
-      <input class="border rounded p-1 bg-black" type="text" id="matrix-text" name="matrix-text" autofocus />
-      <input
+        fetchForm(this, 'matrix-text')
+        this.reset()
+        return false
+      ">
+      <input id="matrix-text" name="matrix-text" type="text" class="border rounded p-1 bg-black" autofocus />
+      <input type="submit"
         class="ml-8 my-8 lg:my-10 rounded px-3.5 py-1.5 md:px-4 lg:px-5 xl:px-5.5 2xl:px-6 bg-red-600 text-black hover:scale-105 active:scale-105 active:bg-black active:text-red-600"
-        type="submit" value="&#10140;" />
+        value="&#10140;" />
     </form>
+
+    <form id="brightness">
+      <input id="brightness" name="brightness" type="range"
+        class="appearance-none w-full rounded-lg bg-gray-700" min="0" max="15" value="0"
+        oninput="fetchForm(this.form, '/brightness')" />
+    </form>  
   </div>
 
   <form id="wifi-config"
     class="opacity-20 hover:opacity-100 absolute bottom-0 right-0 p-4 flex justify-center items-center text-gray-300"
     onsubmit="
-      submitForm(this, '/wifi-config')
+      fetchForm(this, '/wifi-config')
       this.reset()
       return false
     ">
     <h2 class="cursor-default select-none mr-4 font-bold text-2xl">wifi</h2>
-    <input class="mx-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" type="text" id="wifi-ssid"
-      name="wifi-ssid" placeholder="SSID" autofocus autocomplete="off" autocorrect="off" autocapitalize="off"
-      spellcheck="false" />
-    <input class="mx-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" type="password"
-      id="wifi-password" name="wifi-password" placeholder="password" />
-    <input
+    <input id="wifi-ssid" name="wifi-ssid" type="text"
+      class="mx-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" placeholder="SSID" autofocus
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    <input id="wifi-password" name="wifi-password" type="password"
+      class="mx-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" placeholder="password" />
+    <input type="submit"
       class="m-2 rounded px-2 bg-gray-300 font-bold text-3xl text-black hover:scale-105 active:scale-105 active:bg-black active:text-gray-300"
-      type="submit" value="&#10003;" />
+      value="&#10003;" />
   </form>
 </body>
 
