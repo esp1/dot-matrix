@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="styles.css" />
 
   <script>
-    const fetchForm = (form, url) =>
+    const postForm = (url, form) =>
       fetch(url, {
         method: "POST",
         body: new FormData(form)
@@ -21,7 +21,7 @@
     </h1>
     
     <form id="matrix-text" class="flex justify-center items-center" onsubmit="
-        fetchForm(this, 'matrix-text')
+        postForm('matrix-text', form)
         this.reset()
         return false
       ">
@@ -31,17 +31,18 @@
         value="&#10140;" />
     </form>
 
-    <form id="brightness">
+    <form id="brightness" class="flex items-center text-gray-500">
+      <label for="brightness" class="mr-4 text-base">brightness</label>
       <input id="brightness" name="brightness" type="range"
-        class="appearance-none w-full rounded-lg bg-gray-700" min="0" max="15" value="0"
-        oninput="fetchForm(this.form, '/brightness')" />
+        class="appearance-none w-full h-4 rounded-lg bg-gray-700" min="0" max="15" value="0"
+        oninput="postForm('/brightness', this.form)" />
     </form>  
   </div>
 
   <form id="wifi-config"
     class="opacity-20 hover:opacity-100 absolute bottom-0 right-0 p-4 flex justify-center items-center text-gray-300"
     onsubmit="
-      fetchForm(this, '/wifi-config')
+      postForm('/wifi-config', form)
       this.reset()
       return false
     ">
