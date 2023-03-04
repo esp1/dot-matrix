@@ -10,9 +10,12 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
   // Station mode
   server->serveStatic("/", LittleFS, "/web/").setDefaultFile("index.html");
 
-  server->on("/matrix", [state](auto *req) {
-    if (req->hasParam("text")) {
-      render::scroll_text(state, req->getParam("text")->value());
+  server->on("/matrix-text", [state](auto *req) {
+    if (req->hasParam("matrix-text", true)) {
+      render::scroll_text(state, req->getParam("matrix-text", true)->value());
+      req->send(200, "text/plain", "OK");
+    } else {
+      req->send(400, "text", "Missing 'matrix-text' parameter");
     }
     req->redirect("/");
   });
@@ -23,11 +26,6 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
       req->redirect("http://" + WiFi.softAPIP().toString() + "/index.html");
     }
   });
-}
-
-void on(AsyncWebServer *const server, const char *uri,
-        ArRequestHandlerFunction callback) {
-  server->on(uri, callback);
 }
 
 } // namespace web_server

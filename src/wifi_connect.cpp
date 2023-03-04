@@ -47,13 +47,16 @@ void setup(AsyncWebServer *const server) {
   ssid = wifi_config->ssid;
   password = wifi_config->password;
 
-  web_server::on(server, "/setup", [](auto *req) {
+  server->on("/wifi-config", [](auto *req) {
     wifi_connected = false;
 
-    ssid = req->getParam("wifi-ssid")->value().c_str();
-    password = req->getParam("wifi-password")->value().c_str();
-
-    req->redirect("/");
+    if (req->hasParam("wifi-ssid", true) && req->hasParam("wifi-password", true)) {
+      ssid = req->getParam("wifi-ssid", true)->value().c_str();
+      password = req->getParam("wifi-password", true)->value().c_str();
+      req->send(200, "text/plain", "OK");
+    } else {
+      req->send(400, "text/plain", "Missing 'wifi-ssid' and 'wifi-password' parameters");
+    }
   });
 }
 
