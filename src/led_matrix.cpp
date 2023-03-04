@@ -61,10 +61,6 @@ void set_column(MD_MAX72XX *const matrix, uint16_t column, uint8_t value) {
   matrix->setColumn(column, value);
 }
 
-void set_row(MD_MAX72XX *const matrix, uint8_t row, uint8_t value) {
-  matrix->setRow(row, value);
-}
-
 void set_buffer(MD_MAX72XX *const matrix, uint16_t column_offset,
                 GraphicsBuffer *const graphics) {
   matrix->setBuffer(display_width(matrix) - 1 - column_offset, graphics->size(),
