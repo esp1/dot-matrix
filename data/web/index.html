@@ -6,18 +6,12 @@
   <link rel="stylesheet" href="styles.css" />
 
   <script>
-    const onsubmit = (formId, submitUrl, handler, errorHandler) => {
-      const form = document.forms[formId]
-      form.onsubmit = (evt) => {
-        evt.preventDefault()
-        fetch(submitUrl, {
-          method: "POST",
-          body: new FormData(form)
-        }).then(
-          (response) => handler(form, response),
-          (error) => errorHandler(form, error))
-      }
-    }
+    const submitForm = (form, url) =>
+      fetch(url, {
+        method: "POST",
+        body: new FormData(form)
+      })
+
   </script>
 </head>
 
@@ -26,24 +20,25 @@
     <h1 class="rounded pl-4 pt-12 pb-4 bg-red-600 font-bold text-black">
       dot matrix
     </h1>
-    <form id="matrix-text" class="flex justify-center items-center">
+    <form id="matrix-text" class="flex justify-center items-center" onsubmit="
+      submitForm(this, 'matrix-text')
+      this.reset()
+      return false
+    ">
       <input class="border rounded p-1 bg-black" type="text" id="matrix-text" name="matrix-text" autofocus />
       <input
         class="ml-8 my-8 lg:my-10 rounded px-3.5 py-1.5 md:px-4 lg:px-5 xl:px-5.5 2xl:px-6 bg-red-600 text-black hover:scale-105 active:scale-105 active:bg-black active:text-red-600"
         type="submit" value="&#10140;" />
     </form>
-    <script>
-      onsubmit("matrix-text", "/matrix-text",
-        (form, response) => {
-          if (response.ok) {
-            form.elements["matrix-text"].value = ""
-          }
-        })
-    </script>
   </div>
 
   <form id="wifi-config"
-    class="opacity-20 hover:opacity-100 absolute bottom-0 right-0 p-4 flex justify-center items-center text-gray-300">
+    class="opacity-20 hover:opacity-100 absolute bottom-0 right-0 p-4 flex justify-center items-center text-gray-300"
+    onsubmit="
+      submitForm(this, '/wifi-config')
+      this.reset()
+      return false
+    ">
     <h2 class="cursor-default select-none mr-4 font-bold text-2xl">wifi</h2>
     <input class="mx-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" type="text" id="wifi-ssid"
       name="wifi-ssid" placeholder="SSID" autofocus autocomplete="off" autocorrect="off" autocapitalize="off"
@@ -54,15 +49,6 @@
       class="m-2 rounded px-2 bg-gray-300 font-bold text-3xl text-black hover:scale-105 active:scale-105 active:bg-black active:text-gray-300"
       type="submit" value="&#10003;" />
   </form>
-  <script>
-    onsubmit("wifi-config", "/wifi-config",
-      (form, response) => {
-        if (response.ok) {
-          form.elements["wifi-ssid"].value = ""
-          form.elements["wifi-password"].value = ""
-        }
-      })
-  </script>
 </body>
 
 </html>

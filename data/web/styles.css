@@ -525,10 +525,6 @@ video {
   right: 0px;
 }
 
-.top-0 {
-  top: 0px;
-}
-
 .m-2 {
   margin: 0.5rem;
 }
@@ -561,30 +557,6 @@ video {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-full {
-  height: 100%;
-}
-
-.h-\[calc\] {
-  height: calc;
-}
-
-.h-\[calc\(\)\] {
-  height: calc();
-}
-
-.h-\[calc\(var\(\)\)\] {
-  height: calc(var());
-}
-
-.h-\[calc\(var\(--vh\)\)\] {
-  height: calc(var(--vh));
-}
-
-.h-\[calc\(var\(--vh\2c 1vh\)\)\] {
-  height: calc(var(--vh,1vh));
 }
 
 .cursor-default {
@@ -771,16 +743,6 @@ video {
     padding-right: 1rem;
   }
 
-  .md\:text-9xl {
-    font-size: 8rem;
-    line-height: 1;
-  }
-
-  .md\:text-6xl {
-    font-size: 3.75rem;
-    line-height: 1;
-  }
-
   .md\:text-5xl {
     font-size: 3rem;
     line-height: 1;
@@ -791,16 +753,6 @@ video {
   .lg\:my-10 {
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
-  }
-
-  .lg\:my-12 {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-  }
-
-  .lg\:px-4 {
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 
   .lg\:px-5 {
@@ -815,11 +767,6 @@ video {
 }
 
 @media (min-width: 1280px) {
-  .xl\:px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
   .xl\:px-5 {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
@@ -832,11 +779,6 @@ video {
 }
 
 @media (min-width: 1536px) {
-  .\32xl\:my-16 {
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-  }
-
   .\32xl\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
