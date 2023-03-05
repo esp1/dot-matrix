@@ -5,6 +5,6 @@
 
 namespace web_server {
 
-void setup(AsyncWebServer *const server, MatrixState *const state);
+void setup(AsyncWebServer *const server, DotMatrixState *const state);
 
 } // namespace web_server

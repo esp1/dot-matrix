@@ -17,7 +17,7 @@ bool wifi_connected = false;
 String ssid;
 String password;
 
-void connect_wifi(MatrixState *const state) {
+void connect_wifi(DotMatrixState *const state) {
   Serial.println("Attempting to connect to wifi network: '" + ssid + "'");
   render::text(state, "\x1a wifi", ALIGN_CENTER);
   render::update_display(state);

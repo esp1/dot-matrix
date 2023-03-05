@@ -4,7 +4,7 @@
 
 namespace captive_portal {
 
-void loop(MatrixState *const state);
+void loop(DotMatrixState *const state);
 void stop();
 
 }

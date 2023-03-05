@@ -10,7 +10,7 @@ MD_MAX72XX matrix(MD_MAX72XX::FC16_HW,
                   15,                    // CS
                   NUM_LED_MATRIX_MODULES // # of devices
 );
-MatrixState state(&matrix);
+DotMatrixState state(&matrix);
 AsyncWebServer server(80);
 
 void setup() {

@@ -5,7 +5,7 @@ namespace render {
 
 namespace {
 
-void scroll_horizontal(MatrixState *const state, bool scroll_left) {
+void scroll_horizontal(DotMatrixState *const state, bool scroll_left) {
   auto matrix = state->matrix;
   auto display_width = led_matrix::display_width(state->matrix);
   auto graphics_width = state->graphics->size();
@@ -43,7 +43,7 @@ void scroll_horizontal(MatrixState *const state, bool scroll_left) {
 
 } // namespace
 
-void clear(MatrixState *const state) {
+void clear(DotMatrixState *const state) {
   led_matrix::clear(state->matrix);
   state->column_offset = 0;
   set_scroll_dir(state, SCROLL_NONE);
@@ -56,7 +56,7 @@ void clear(MatrixState *const state) {
  * @param align How the provided graphics should be aligned to the display.
  * @return MatrixStateData* The adjusted matrix state data.
  */
-void align(MatrixState *const state, Alignment alignment) {
+void align(DotMatrixState *const state, Alignment alignment) {
   auto display_width = led_matrix::display_width(state->matrix);
   auto graphics_width = state->graphics->size();
 
@@ -67,7 +67,7 @@ void align(MatrixState *const state, Alignment alignment) {
           : 0.5 * (display_width - graphics_width); // ALIGN_CENTER
 }
 
-void set_scroll_dir(MatrixState *const state, ScrollDirection scroll_dir) {
+void set_scroll_dir(DotMatrixState *const state, ScrollDirection scroll_dir) {
   // if scroll direction changes, invert column offset
   if ((((state->scroll_dir == SCROLL_LEFT) ||
         (state->scroll_dir == SCROLL_NONE)) &&
@@ -83,7 +83,7 @@ void set_scroll_dir(MatrixState *const state, ScrollDirection scroll_dir) {
   state->scroll_dir = scroll_dir;
 }
 
-void text(MatrixState *const state, String str, Alignment alignment) {
+void text(DotMatrixState *const state, String str, Alignment alignment) {
   clear(state);
 
   auto graphics = state->graphics;
@@ -104,13 +104,13 @@ void text(MatrixState *const state, String str, Alignment alignment) {
   align(state, alignment);
 }
 
-void scroll_text(MatrixState *const state, String str,
+void scroll_text(DotMatrixState *const state, String str,
                  ScrollDirection scroll_dir) {
   text(state, str);
   set_scroll_dir(state, scroll_dir);
 }
 
-void update_display(MatrixState *const state) {
+void update_display(DotMatrixState *const state) {
   switch (state->scroll_dir) {
   case SCROLL_LEFT: {
     scroll_horizontal(state, true);

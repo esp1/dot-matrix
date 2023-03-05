@@ -23,9 +23,9 @@ enum ScrollDirection {
   SCROLL_RIGHT,
 };
 
-typedef struct MatrixState {
+typedef struct DotMatrixState {
 
-  MatrixState(MD_MAX72XX *const matrix);
+  DotMatrixState(MD_MAX72XX *const matrix);
 
   /**
    * @brief The physical LED matrix display.

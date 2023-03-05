@@ -15,7 +15,7 @@ DNSServer dnsServer;
 
 } // namespace
 
-void loop(MatrixState *const state) {
+void loop(DotMatrixState *const state) {
   if (!captive_portal_initialized) {
     Serial.println("Starting '" + CAPTIVE_PORTAL_SSID +
                    "' captive portal access point network");

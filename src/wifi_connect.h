@@ -6,6 +6,6 @@
 namespace wifi_connect {
 
 void setup(AsyncWebServer *const server);
-void loop(MatrixState *const state);
+void loop(DotMatrixState *const state);
 
 } // namespace wifi_connect

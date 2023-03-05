@@ -26,7 +26,7 @@ uint8_t loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
   return constrain(speed, 1, 20);
 }
 
-String state_json(MatrixState *const state) {
+String state_json(DotMatrixState *const state) {
   StaticJsonDocument<JSON_OBJECT_SIZE(2)> doc;
   doc["brightness"] = state->brightness;
   doc["speed_dir"] = state->scroll_dir == SCROLL_NONE
