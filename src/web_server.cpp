@@ -40,10 +40,6 @@ String state_json(DotMatrixState *const state) {
   return output;
 }
 
-void state_response(AsyncWebServerRequest *request, MatrixState *const state) {
-  request->send(200, "application/json", state_json(state));
-}
-
 } // namespace
 
 void setup(AsyncWebServer *const server, MatrixState *const state) {
@@ -60,13 +56,15 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
   });
 
   // Dot Matrix state
-  server->on("/state", [state](auto *req) { state_response(req, state); });
+  server->on("/state", [state](auto *req) {
+    req->send(200, "application/json", state_json(state));
+  });
 
   // Application handlers
   server->on("/matrix-text", [state](auto *req) {
     if (req->hasParam("matrix-text", true)) {
       render::scroll_text(state, req->getParam("matrix-text", true)->value());
-      state_response(req, state);
+      req->send(200, "text/plain", "OK");
     } else {
       req->send(400, "text/plain", "Missing 'matrix-text' parameter");
     }
@@ -87,7 +85,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
         render::set_scroll_dir(state, SCROLL_NONE);
       }
 
-      state_response(req, state);
+      req->send(200, "text/plain", "OK");
     } else {
       req->send(400, "text/plain", "Missing 'speed-dir' parameter");
     }
@@ -97,7 +95,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
     if (req->hasParam("brightness", true)) {
       state->brightness = req->getParam("brightness", true)->value().toInt();
       led_matrix::set_brightness(state->matrix, state->brightness);
-      state_response(req, state);
+      req->send(200, "text/plain", "OK");
     } else {
       req->send(400, "text/plain", "Missing 'brightness' parameter");
     }
