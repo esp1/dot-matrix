@@ -97,18 +97,18 @@ void scroll_text(MatrixState *const state, String str,
 void update_display(MatrixState *const state) {
   switch (state->scroll_dir) {
   case SCROLL_LEFT: {
-    scroll_horizontal(state, true);
-    break;
-  }
-  case SCROLL_RIGHT: {
-    scroll_horizontal(state, false);
-    break;
-  }
-  default: {
-    led_matrix::set_buffer(state->matrix, state->column_offset,
-                           state->graphics);
-  }
-  }
+      scroll_horizontal(state, true);
+      break;
+    }
+    case SCROLL_RIGHT: {
+      scroll_horizontal(state, false);
+      break;
+    }
+    default: {
+      led_matrix::set_buffer(state->matrix, state->column_offset,
+                             state->graphics);
+    }
+    }
 }
 
 } // namespace render

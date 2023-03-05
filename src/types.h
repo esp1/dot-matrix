@@ -54,4 +54,11 @@ typedef struct MatrixState {
    */
   uint16_t column_offset = 0;
 
+  /**
+   * @brief Number of milliseconds to delay in the main loop.
+   * Adjusting this to a lower value will increase the refresh rate and
+   * scrolling speed of the display, and vice versa.
+   */
+  uint16_t loop_delay_msec = 100;
+
 } MatrixState;

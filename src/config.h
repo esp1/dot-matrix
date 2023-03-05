@@ -12,10 +12,3 @@
  * @brief The name to use for the captive portal wifi network.
  */
 const String CAPTIVE_PORTAL_SSID = "dot matrix";
-
-/**
- * @brief Number of milliseconds to delay in the main loop.
- * Adjusting this to a lower value will increase the refresh rate and scrolling
- * speed of the display, and vice versa.
- */
-#define LOOP_DELAY_MSEC 100
