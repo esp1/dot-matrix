@@ -46,7 +46,7 @@ void scroll_horizontal(MatrixState *const state, bool scroll_left) {
 void clear(MatrixState *const state) {
   led_matrix::clear(state->matrix);
   state->column_offset = 0;
-  state->scroll_dir = SCROLL_NONE;
+  set_scroll_dir(state, SCROLL_NONE);
 }
 
 /**
@@ -65,6 +65,22 @@ void align(MatrixState *const state, Alignment alignment) {
       : alignment == ALIGN_RIGHT
           ? display_width - graphics_width
           : 0.5 * (display_width - graphics_width); // ALIGN_CENTER
+}
+
+void set_scroll_dir(MatrixState *const state, ScrollDirection scroll_dir) {
+  // if scroll direction changes, invert column offset
+  if ((((state->scroll_dir == SCROLL_LEFT) ||
+        (state->scroll_dir == SCROLL_NONE)) &&
+       (scroll_dir == SCROLL_RIGHT)) ||
+      ((state->scroll_dir == SCROLL_RIGHT) &&
+       ((scroll_dir == SCROLL_LEFT) || (scroll_dir == SCROLL_NONE)))) {
+    auto display_width = led_matrix::display_width(state->matrix);
+    auto graphics_width = state->graphics->size();
+    state->column_offset =
+        display_width + graphics_width - 1 - state->column_offset;
+  }
+
+  state->scroll_dir = scroll_dir;
 }
 
 void text(MatrixState *const state, String str, Alignment alignment) {
@@ -91,24 +107,24 @@ void text(MatrixState *const state, String str, Alignment alignment) {
 void scroll_text(MatrixState *const state, String str,
                  ScrollDirection scroll_dir) {
   text(state, str);
-  state->scroll_dir = scroll_dir;
+  set_scroll_dir(state, scroll_dir);
 }
 
 void update_display(MatrixState *const state) {
   switch (state->scroll_dir) {
   case SCROLL_LEFT: {
-      scroll_horizontal(state, true);
-      break;
-    }
-    case SCROLL_RIGHT: {
-      scroll_horizontal(state, false);
-      break;
-    }
-    default: {
-      led_matrix::set_buffer(state->matrix, state->column_offset,
-                             state->graphics);
-    }
-    }
+    scroll_horizontal(state, true);
+    break;
+  }
+  case SCROLL_RIGHT: {
+    scroll_horizontal(state, false);
+    break;
+  }
+  default: {
+    led_matrix::set_buffer(state->matrix, state->column_offset,
+                           state->graphics);
+  }
+  }
 }
 
 } // namespace render
