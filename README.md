@@ -1,4 +1,4 @@
-# Things you will need
+# Dot Matrix
 
 ## Hardware
 -   A laptop

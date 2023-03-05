@@ -59,8 +59,8 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
     }
   });
 
-  // Matrix status
-  server->on("/status", [state](auto *req) { state_response(req, state); });
+  // Dot Matrix state
+  server->on("/state", [state](auto *req) { state_response(req, state); });
 
   // Application handlers
   server->on("/matrix-text", [state](auto *req) {
