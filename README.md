@@ -241,11 +241,10 @@ MD_MAX72XX matrix(
     -   `req->hasParam()`
     -   `req->getParam()`
     -   `req->send()`
-    -   `req->redirect()`
 
 ### loop()
 -   `render::update_display(&state)`
--   `delay(LOOP_DELAY_MSEC)`
+-   `delay(state.loop_delay_msec)`
 
 ## Testing firmware
 -   Put tests in `test` dir

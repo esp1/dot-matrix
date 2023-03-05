@@ -23,7 +23,7 @@ void clear(MD_MAX72XX *const matrix);
 
 /**
  * @brief Sets the brightness of the LED display.
- * Values range from 0 to 15 (MD_MAX72XX::MAX_INTENSITY)
+ * Brightness values range from 0 to 15 (MD_MAX72XX::MAX_INTENSITY).
  */
 void set_brightness(MD_MAX72XX *const matrix, int intensity);
 

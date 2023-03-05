@@ -6,11 +6,18 @@
   <link rel="stylesheet" href="styles.css" />
 
   <script>
+    const syncState = (response) =>
+      response.json()
+        .then(({ brightness, speed_dir }) => {
+          document.forms["brightness"].elements["brightness"].value = brightness
+          document.forms["speed-dir"].elements["speed-dir"].value = speed_dir
+        })
+
     const postForm = (url, form) =>
       fetch(url, {
         method: "POST",
         body: new FormData(form)
-      })
+      }).then(syncState)
   </script>
 </head>
 
@@ -42,7 +49,7 @@
           </svg>
         </div>
         <input id="speed-dir" name="speed-dir" type="range" class="appearance-none w-full h-4 rounded-lg bg-gray-600"
-          min="-20" max="20" value="0" oninput="postForm('/speed-dir', this.form)" />
+          min="-20" max="20" value="-10" oninput="postForm('/speed-dir', this.form)" />
       </div>
     </form>
 
@@ -68,6 +75,11 @@
         value="&#10003;" />
     </form>
   </div>
+
+  <script>
+    fetch("/status")
+      .then(syncState)
+  </script>
 </body>
 
 </html>

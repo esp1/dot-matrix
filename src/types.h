@@ -61,4 +61,10 @@ typedef struct MatrixState {
    */
   uint16_t loop_delay_msec = 100;
 
+  /**
+   * @brief The brightness of the LED display.
+   * Brightness values range from 0 to 15 (MD_MAX72XX::MAX_INTENSITY).
+   */
+  uint8_t brightness = 0;
+
 } MatrixState;

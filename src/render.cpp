@@ -121,7 +121,9 @@ void update_display(MatrixState *const state) {
     break;
   }
   default: {
-    led_matrix::set_buffer(state->matrix, state->column_offset,
+    auto display_width = led_matrix::display_width(state->matrix);
+    led_matrix::set_buffer(state->matrix,
+                           display_width - 1 - state->column_offset,
                            state->graphics);
   }
   }

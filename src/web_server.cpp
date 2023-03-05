@@ -1,4 +1,5 @@
 #include "web_server.h"
+#include "ArduinoJson.h"
 #include "led_matrix.h"
 #include "render.h"
 #include <LittleFS.h>
@@ -17,8 +18,30 @@ namespace {
 uint16_t speed_to_loop_delay_msec(long s) {
   auto speed = constrain(s, 1, 20);
   uint16_t loop_delay_msec = 10 + pow(20 - speed, 1.5);
-  Serial.println(loop_delay_msec);
   return loop_delay_msec;
+}
+
+uint8_t loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
+  auto speed = 20 - pow(loop_delay_msec - 10, 0.6666666667);
+  return constrain(speed, 1, 20);
+}
+
+String state_json(MatrixState *const state) {
+  StaticJsonDocument<JSON_OBJECT_SIZE(2)> doc;
+  doc["brightness"] = state->brightness;
+  doc["speed_dir"] = state->scroll_dir == SCROLL_NONE
+                         ? 0
+                         : (state->scroll_dir == SCROLL_LEFT ? -1 : 1) *
+                               loop_delay_msec_to_speed(state->loop_delay_msec);
+
+  String output = "";
+  serializeJson(doc, output);
+
+  return output;
+}
+
+void state_response(AsyncWebServerRequest *request, MatrixState *const state) {
+  request->send(200, "application/json", state_json(state));
 }
 
 } // namespace
@@ -36,11 +59,14 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
     }
   });
 
+  // Matrix status
+  server->on("/status", [state](auto *req) { state_response(req, state); });
+
   // Application handlers
   server->on("/matrix-text", [state](auto *req) {
     if (req->hasParam("matrix-text", true)) {
       render::scroll_text(state, req->getParam("matrix-text", true)->value());
-      req->send(200, "text/plain", "OK");
+      state_response(req, state);
     } else {
       req->send(400, "text/plain", "Missing 'matrix-text' parameter");
     }
@@ -61,7 +87,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
         render::set_scroll_dir(state, SCROLL_NONE);
       }
 
-      req->send(200, "text/plain", "OK");
+      state_response(req, state);
     } else {
       req->send(400, "text/plain", "Missing 'speed-dir' parameter");
     }
@@ -69,9 +95,9 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
 
   server->on("/brightness", [state](auto *req) {
     if (req->hasParam("brightness", true)) {
-      led_matrix::set_brightness(
-          state->matrix, req->getParam("brightness", true)->value().toInt());
-      req->send(200, "text/plain", "OK");
+      state->brightness = req->getParam("brightness", true)->value().toInt();
+      led_matrix::set_brightness(state->matrix, state->brightness);
+      state_response(req, state);
     } else {
       req->send(400, "text/plain", "Missing 'brightness' parameter");
     }
