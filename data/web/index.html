@@ -14,67 +14,82 @@
   </script>
 </head>
 
-<body class="h-screen bg-black font-mono text-red-600 grid place-content-center">
+<body class="h-screen bg-zinc-900 font-mono text-red-600 grid place-content-center">
   <div class="text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl">
-    <h1 class="rounded pl-4 pt-12 pb-4 bg-red-600 font-bold text-black">
+    <h1 class="rounded pl-4 pt-12 pb-4 bg-red-600 font-bold text-zinc-900">
       dot matrix
     </h1>
 
-    <form id="matrix-text" class="flex justify-center items-center" onsubmit="
-        postForm('matrix-text', this)
+    <form id="matrix-text-form" class="flex justify-center items-center" onsubmit="
+        postForm('/matrix-text', this)
         this.reset()
         return false
       ">
-      <input id="matrix-text" name="matrix-text" type="text" class="border rounded p-1 bg-black" autofocus />
+      <input name="matrix-text" type="text" class="border rounded p-1 bg-zinc-900" autofocus />
       <input type="submit"
-        class="ml-8 my-8 lg:my-10 rounded px-3.5 py-1.5 md:px-4 lg:px-5 xl:px-5.5 2xl:px-6 bg-red-600 text-black hover:scale-105 active:scale-105 active:bg-black active:text-red-600"
+        class="ml-8 my-8 lg:my-10 rounded px-3.5 py-1.5 md:px-4 lg:px-5 xl:px-5.5 2xl:px-6 bg-red-600 text-zinc-900 hover:scale-105 active:scale-105 active:bg-zinc-900 active:text-red-600"
         value="&#10140;" />
     </form>
   </div>
 
-  <div class="opacity-20 hover:opacity-100 absolute bottom-0 right-0 p-4 flex flex-col text-gray-300">
-    <form id="speed-dir" class="mb-4 flex items-center">
-      <label for="speed-dir" class="mr-4">speed/direction</label>
-      <div class="relative w-full">
-        <div class="absolute bottom-0 left-0 w-full flex justify-center">
-          <svg class="w-[10px] h-[5px] object-cover fill-gray-300">
-            <polygon points="0,5 5,0 10,5" />
-          </svg>
+  <div id="controls-toggle" class="absolute bottom-0 right-0 p-8 text-7xl text-zinc-500 hover:text-zinc-300"
+    onclick="document.getElementById('controls').classList.toggle('hidden')">
+    &#9881;
+  </div>
+
+
+  <div id="controls"
+    class="hidden absolute bottom-0 right-0 border-t-2 border-l-2 border-zinc-900 rounded-tl-lg bg-gradient-to-b from-zinc-800 to-zinc-900 text-3xl text-zinc-300 flex flex-col">
+    <div class="px-8 pt-8">
+      <form id="speed-dir-form" class="mb-8 flex items-center">
+        <label for="speed-dir" class="mr-4">speed/direction</label>
+        <div class="relative w-full">
+          <div class="absolute bottom-0 left-0 w-full flex justify-center">
+            <svg class="w-[10px] h-[5px] object-cover fill-zinc-300">
+              <polygon points="0,5 5,0 10,5" />
+            </svg>
+          </div>
+          <input name="speed-dir" type="range" class="appearance-none w-full h-4 rounded-lg bg-zinc-600" min="-20"
+            max="20" value="-1" oninput="postForm('/speed-dir', this.form)" />
         </div>
-        <input id="speed-dir" name="speed-dir" type="range" class="appearance-none w-full h-4 rounded-lg bg-gray-600"
-          min="-20" max="20" value="-1" oninput="postForm('/speed-dir', this.form)" />
-      </div>
-    </form>
+      </form>
 
-    <form id="brightness" class="mb-4 flex items-center">
-      <label for="brightness" class="mr-4">brightness</label>
-      <input id="brightness" name="brightness" type="range" class="appearance-none w-full h-4 rounded-lg bg-gray-600"
-        min="0" max="15" value="0" oninput="postForm('/brightness', this.form)" />
-    </form>
+      <form id="brightness-form" class="mb-8 flex items-center">
+        <label for="brightness" class="mr-4">brightness</label>
+        <input name="brightness" type="range" class="appearance-none w-full h-4 rounded-lg bg-zinc-600" min="0" max="15"
+          value="0" oninput="postForm('/brightness', this.form)" />
+      </form>
 
-    <form id="wifi-config" class="flex items-center" onsubmit="
+      <form id="wifi-config-form" class="flex items-center" onsubmit="
         postForm('/wifi-config', this)
         this.reset()
         return false
       ">
-      <h2 class="cursor-default select-none inline mr-4">wifi</h2>
-      <input id="wifi-ssid" name="wifi-ssid" type="text"
-        class="mr-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" placeholder="SSID" autofocus
-        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-      <input id="wifi-password" name="wifi-password" type="password"
-        class="mr-2 border rounded border-gray-300 p-1 bg-black placeholder-gray-600" placeholder="password" />
-      <input type="submit"
-        class="rounded px-2 bg-gray-600 font-bold text-xl text-black hover:scale-105 hover:bg-gray-500 active:scale-105 active:bg-black active:text-gray-300"
-        value="&#10003;" />
-    </form>
+        <h2 class="cursor-default select-none inline mr-4">wifi</h2>
+        <input name="wifi-ssid" type="text"
+          class="mr-2 border rounded border-zinc-300 p-1 bg-zinc-900 placeholder-zinc-600" placeholder="SSID" autofocus
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+        <input name="wifi-password" type="password"
+          class="mr-2 border rounded border-zinc-300 p-1 bg-zinc-900 placeholder-zinc-600" placeholder="password" />
+        <input type="submit"
+          class="rounded px-2 bg-zinc-600 font-bold text-xl text-zinc-900 hover:scale-105 hover:bg-zinc-500 active:scale-105 active:bg-zinc-900 active:text-zinc-300"
+          value="&#10003;" />
+      </form>
+    </div>
+
+    <div id="controls-toggle" class="self-end pt-4 pr-8 pb-8 text-7xl text-zinc-500 hover:text-zinc-300"
+      onclick="document.getElementById('controls').classList.toggle('hidden')">
+      &#9881;
+    </div>
   </div>
+
 
   <script>
     fetch("/state")
       .then((response) => response.json())
       .then(({ brightness, speed_dir }) => {
-        document.forms["brightness"].elements["brightness"].value = brightness
-        document.forms["speed-dir"].elements["speed-dir"].value = speed_dir
+        document.forms["brightness-form"].elements["brightness"].value = brightness
+        document.forms["speed-dir-form"].elements["speed-dir"].value = speed_dir
       })
   </script>
 </body>
