@@ -46,7 +46,7 @@ void scroll_horizontal(DotMatrixState *const state, bool scroll_left) {
 void clear(DotMatrixState *const state) {
   led_matrix::clear(state->matrix);
   state->column_offset = 0;
-  set_scroll_dir(state, SCROLL_NONE);
+  state->scroll_dir = SCROLL_NONE;
 }
 
 /**
@@ -61,9 +61,9 @@ void align(DotMatrixState *const state, Alignment alignment) {
   auto graphics_width = state->graphics->size();
 
   state->column_offset =
-      alignment == ALIGN_LEFT ? 0
+      alignment == ALIGN_LEFT ? 0 // ALIGN_LEFT
       : alignment == ALIGN_RIGHT
-          ? display_width - graphics_width
+          ? display_width - graphics_width          // ALIGN_RIGHT
           : 0.5 * (display_width - graphics_width); // ALIGN_CENTER
 }
 
@@ -83,12 +83,13 @@ void set_scroll_dir(DotMatrixState *const state, ScrollDirection scroll_dir) {
   } else {
     // changing to SCROLL_LEFT or SCROLL_RIGHT
     if (state->scroll_dir == SCROLL_NONE) {
+      // changing from SCROLL_NONE
       if (scroll_dir == SCROLL_LEFT) {
-        // changing from SCROLL_NONE to SCROLL_LEFT
+        // changing to SCROLL_LEFT
         auto display_width = led_matrix::display_width(state->matrix);
         state->column_offset = display_width - state->column_offset;
       } else if (scroll_dir == SCROLL_RIGHT) {
-        // changing from SCROLL_NONE to SCROLL_RIGHT
+        // changing to SCROLL_RIGHT
         auto graphics_width = state->graphics->size();
         state->column_offset = state->column_offset + graphics_width;
       }
@@ -131,7 +132,7 @@ void text(DotMatrixState *const state, String str, Alignment alignment) {
 void scroll_text(DotMatrixState *const state, String str,
                  ScrollDirection scroll_dir) {
   text(state, str);
-  set_scroll_dir(state, scroll_dir);
+  state->scroll_dir = scroll_dir;
 }
 
 void update_display(DotMatrixState *const state) {
@@ -146,9 +147,15 @@ void update_display(DotMatrixState *const state) {
   }
   default: {
     auto display_width = led_matrix::display_width(state->matrix);
-    led_matrix::set_buffer(state->matrix,
-                           display_width - 1 - state->column_offset,
-                           state->graphics);
+    auto led_column = constrain(display_width - 1 - state->column_offset, 0,
+                                display_width - 1);
+
+    // trim any negative (offscreen) portion of graphics buffer
+    auto graphics_offset = state->column_offset < 0 ? -state->column_offset : 0;
+    auto buf_size = state->graphics->size() - graphics_offset;
+    auto buf = state->graphics->data() + graphics_offset;
+
+    led_matrix::set_buffer(state->matrix, led_column, buf_size, buf);
   }
   }
 }

@@ -38,7 +38,7 @@ void set_column(MD_MAX72XX *const matrix, uint16_t column, uint8_t value);
 /**
  * @brief Displays the contents of the graphics buffer on the LED display.
  */
-void set_buffer(MD_MAX72XX *const matrix, int16_t column_offset,
-                GraphicsBuffer *const graphics);
+void set_buffer(MD_MAX72XX *const matrix, uint16_t column, uint8_t buf_size,
+                uint8_t *buf);
 
 } // namespace led_matrix

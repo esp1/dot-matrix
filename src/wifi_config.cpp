@@ -19,8 +19,8 @@ void setup() {
 WifiConfig *get() { return &eeprom_wifi_config; }
 
 void save(String ssid, String password) {
-  if (strcmp(ssid.c_str(), eeprom_wifi_config.ssid) != 0 ||
-      strcmp(password.c_str(), eeprom_wifi_config.password) != 0) {
+  if ((strcmp(ssid.c_str(), eeprom_wifi_config.ssid) != 0) ||
+      (strcmp(password.c_str(), eeprom_wifi_config.password) != 0)) {
     Serial.println("Saving wifi config to EEPROM");
 
     strcpy(eeprom_wifi_config.ssid, ssid.c_str());

@@ -61,11 +61,9 @@ void set_column(MD_MAX72XX *const matrix, uint16_t column, uint8_t value) {
   matrix->setColumn(column, value);
 }
 
-void set_buffer(MD_MAX72XX *const matrix, int16_t column_offset,
-                GraphicsBuffer *const graphics) {
-  if (column_offset >= 0) {
-    matrix->setBuffer(column_offset, graphics->size(), graphics->data());
-  }
+void set_buffer(MD_MAX72XX *const matrix, uint16_t column, uint8_t buf_size,
+                uint8_t *buf) {
+  matrix->setBuffer(column, buf_size, buf);
 }
 
 } // namespace led_matrix

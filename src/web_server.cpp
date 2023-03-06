@@ -63,10 +63,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
   // Application handlers
   server->on("/matrix-text", [state](auto *req) {
     if (req->hasParam("matrix-text", true)) {
-      render::text(state, req->getParam("matrix-text", true)->value());
-      if (state->scroll_dir == SCROLL_NONE) {
-        render::set_scroll_dir(state, SCROLL_LEFT);
-      }
+      render::scroll_text(state, req->getParam("matrix-text", true)->value(), state->scroll_dir);
       req->send(200, "text/plain", "OK");
     } else {
       req->send(400, "text/plain", "Missing 'matrix-text' parameter");
