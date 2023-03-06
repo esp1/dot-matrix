@@ -39,7 +39,7 @@
 
 
   <div id="controls"
-    class="hidden absolute bottom-0 right-0 border-t-2 border-l-2 border-zinc-900 rounded-tl-lg bg-gradient-to-b from-zinc-800 to-zinc-900 text-3xl text-zinc-300 flex flex-col">
+    class="hidden absolute bottom-0 right-0 border-t-2 border-l-2 border-zinc-900 rounded-tl-lg bg-gradient-to-b from-zinc-800 to-zinc-900 text-2xl text-zinc-300 flex flex-col">
     <div class="px-8 pt-8">
       <form id="speed-dir-form" class="mb-8 flex items-center">
         <label for="speed-dir" class="mr-4">speed/direction</label>
@@ -49,14 +49,14 @@
               <polygon points="0,5 5,0 10,5" />
             </svg>
           </div>
-          <input name="speed-dir" type="range" class="appearance-none w-full h-4 rounded-lg bg-zinc-600" min="-20"
+          <input name="speed-dir" type="range" class="appearance-none w-full h-8 rounded-full bg-zinc-600" min="-20"
             max="20" value="-1" oninput="postForm('/speed-dir', this.form)" />
         </div>
       </form>
 
       <form id="brightness-form" class="mb-8 flex items-center">
         <label for="brightness" class="mr-4">brightness</label>
-        <input name="brightness" type="range" class="appearance-none w-full h-4 rounded-lg bg-zinc-600" min="0" max="15"
+        <input name="brightness" type="range" class="appearance-none w-full h-8 rounded-full bg-zinc-600" min="0" max="15"
           value="0" oninput="postForm('/brightness', this.form)" />
       </form>
 
