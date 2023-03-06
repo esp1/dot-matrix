@@ -46,11 +46,26 @@ typedef struct DotMatrixState {
   /**
    * @brief The column offset.
    * The number of pixels that the edge of the display buffer is from the edge
-   * of the display matrix. A zero column offset indicates the opposite edge
-   * from the scroll direction, with positive values oriented in the scroll
-   * direction. This means that for example when the scroll direction is LEFT,
-   * positive column offset values indicate the distance to the left of the
-   * right edge of the display.
+   * of the display matrix. The way the column offset is interpreted depends on
+   * the scroll direction:
+   *
+   * If the scroll direction is SCROLL_NONE (i.e. when there is no scrolling),
+   * then the column offset is the number of pixels from the LEFT edge of the
+   * display to the LEFT edge of the graphics buffer, with positive column
+   * offset values going to the RIGHT.
+   *
+   * If the display is set to SCROLL_LEFT or SCROLL_RIGHT, the column offset
+   * will indicate the distance from the edge of the display where graphics
+   * enter, to the edge of the graphics buffer that first enters the display,
+   * with positive column offset values oriented in the scroll direction:
+   *
+   * If the scroll direction is SCROLL_LEFT, then the column offset is the
+   * number of pixels from the RIGHT edge of the display to the LEFT edge of the
+   * graphics buffer, with positive column offset values going LEFT.
+   *
+   * If the scroll direction is SCROLL_RIGHT, then the column offset is the
+   * number of pixels from the LEFT edge of the display to the RIGHT edge of the
+   * graphics buffer, with positive column offset values going RIGHT.
    */
   int16_t column_offset = 0;
 
