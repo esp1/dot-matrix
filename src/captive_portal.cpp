@@ -17,7 +17,7 @@ DNSServer dnsServer;
 
 void loop(DotMatrixState *const state) {
   if (!captive_portal_initialized) {
-    Serial.println("Starting '" + CAPTIVE_PORTAL_SSID +
+    Serial.println("Starting '" + String(CAPTIVE_PORTAL_SSID) +
                    "' captive portal access point network");
 
     WiFi.mode(WIFI_AP);
@@ -35,7 +35,7 @@ void loop(DotMatrixState *const state) {
 
 void stop() {
   if (captive_portal_initialized) {
-    Serial.println("Shutting down '" + CAPTIVE_PORTAL_SSID +
+    Serial.println("Shutting down '" + String(CAPTIVE_PORTAL_SSID) +
                    "' captive portal access point network");
 
     dnsServer.stop();
