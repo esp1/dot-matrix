@@ -3,6 +3,9 @@
 
 <head>
   <title>Dot Matrix</title>
+
+  <link rel="apple-touch-icon" href="/icons/dotmatrix-180.png">
+
   <link rel="stylesheet" href="styles.css" />
 
   <script>
@@ -56,8 +59,8 @@
 
       <form id="brightness-form" class="mb-8 flex items-center">
         <label for="brightness" class="mr-4">brightness</label>
-        <input name="brightness" type="range" class="appearance-none w-full h-8 rounded-full bg-zinc-600" min="0" max="15"
-          value="0" oninput="postForm('/brightness', this.form)" />
+        <input name="brightness" type="range" class="appearance-none w-full h-8 rounded-full bg-zinc-600" min="0"
+          max="15" value="0" oninput="postForm('/brightness', this.form)" />
       </form>
 
       <form id="wifi-config-form" class="flex items-center" onsubmit="
