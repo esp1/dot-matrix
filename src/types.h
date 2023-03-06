@@ -52,7 +52,7 @@ typedef struct DotMatrixState {
    * positive column offset values indicate the distance to the left of the
    * right edge of the display.
    */
-  uint16_t column_offset = 0;
+  int16_t column_offset = 0;
 
   /**
    * @brief Number of milliseconds to delay in the main loop.

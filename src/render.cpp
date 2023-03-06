@@ -11,7 +11,7 @@ void scroll_horizontal(DotMatrixState *const state, bool scroll_left) {
   auto graphics_width = state->graphics->size();
   auto graphics = *(state->graphics);
 
-  if (state->column_offset >= display_width + graphics_width) {
+  if (state->column_offset >= (int16_t)(display_width + graphics_width)) {
     // graphics have scrolled off of the display
     // reset the column offset to loop
     state->column_offset = 0;
@@ -30,7 +30,7 @@ void scroll_horizontal(DotMatrixState *const state, bool scroll_left) {
             : graphics_width - 1 - state->column_offset; // index from right
 
     auto col_value =
-        state->column_offset < graphics.size()
+        (graphics_idx >= 0) && (graphics_idx < graphics_width)
             ? graphics[graphics_idx] // index within graphics buffer
             : 0; // index outside graphics buffer (blank column)
 
@@ -68,16 +68,40 @@ void align(DotMatrixState *const state, Alignment alignment) {
 }
 
 void set_scroll_dir(DotMatrixState *const state, ScrollDirection scroll_dir) {
-  // if scroll direction changes, invert column offset
-  if ((((state->scroll_dir == SCROLL_LEFT) ||
-        (state->scroll_dir == SCROLL_NONE)) &&
-       (scroll_dir == SCROLL_RIGHT)) ||
-      ((state->scroll_dir == SCROLL_RIGHT) &&
-       ((scroll_dir == SCROLL_LEFT) || (scroll_dir == SCROLL_NONE)))) {
-    auto display_width = led_matrix::display_width(state->matrix);
-    auto graphics_width = state->graphics->size();
-    state->column_offset =
-        display_width + graphics_width - 1 - state->column_offset;
+  // update column offset based on scroll direciton changes
+  if (scroll_dir == SCROLL_NONE) {
+    // changing to SCROLL_NONE
+    if (state->scroll_dir == SCROLL_LEFT) {
+      // changing from SCROLL_LEFT
+      auto display_width = led_matrix::display_width(state->matrix);
+      state->column_offset = display_width - state->column_offset;
+    } else if (state->scroll_dir == SCROLL_RIGHT) {
+      // changing from SCROLL_RIGHT
+      auto graphics_width = state->graphics->size();
+      state->column_offset = state->column_offset - graphics_width;
+    }
+  } else {
+    // changing to SCROLL_LEFT or SCROLL_RIGHT
+    if (state->scroll_dir == SCROLL_NONE) {
+      if (scroll_dir == SCROLL_LEFT) {
+        // changing from SCROLL_NONE to SCROLL_LEFT
+        auto display_width = led_matrix::display_width(state->matrix);
+        state->column_offset = display_width - state->column_offset;
+      } else if (scroll_dir == SCROLL_RIGHT) {
+        // changing from SCROLL_NONE to SCROLL_RIGHT
+        auto graphics_width = state->graphics->size();
+        state->column_offset = state->column_offset + graphics_width;
+      }
+    } else if (((state->scroll_dir == SCROLL_LEFT) &&
+                (scroll_dir == SCROLL_RIGHT)) ||
+               ((state->scroll_dir == SCROLL_RIGHT) &&
+                (scroll_dir == SCROLL_LEFT))) {
+      // changing from SCROLL_LEFT to SCROLL_RIGHT or vice versa
+      auto display_width = led_matrix::display_width(state->matrix);
+      auto graphics_width = state->graphics->size();
+      state->column_offset =
+          display_width + graphics_width - state->column_offset;
+    }
   }
 
   state->scroll_dir = scroll_dir;
