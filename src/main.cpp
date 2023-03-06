@@ -29,7 +29,5 @@ void setup() {
 
 void loop() {
   wifi_connect::loop(&state);
-  render::update_display(&state);
-
-  delay(state.loop_delay_msec);
+  render::loop(&state);
 }

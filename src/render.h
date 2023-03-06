@@ -41,4 +41,19 @@ void scroll_text(DotMatrixState *const state, String str,
  */
 void update_display(DotMatrixState *const state);
 
+/**
+ * @brief Returns the current loop delay in milliseconds.
+ */
+uint16_t loop_delay_msec();
+
+/**
+ * @brief Sets the current loop delay in milliseconds.
+ */
+void set_loop_delay_msec(uint16_t delay_msec);
+
+/**
+ * @brief Render function to call within the main loop() function.
+ */
+void loop(DotMatrixState *const state);
+
 } // namespace render

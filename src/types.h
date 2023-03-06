@@ -70,13 +70,6 @@ typedef struct DotMatrixState {
   int16_t column_offset = 0;
 
   /**
-   * @brief Number of milliseconds to delay in the main loop.
-   * Adjusting this to a lower value will increase the refresh rate and
-   * scrolling speed of the display, and vice versa.
-   */
-  uint16_t loop_delay_msec = 100;
-
-  /**
    * @brief The brightness of the LED display.
    * Brightness values range from 0 to 15 (MD_MAX72XX::MAX_INTENSITY).
    */

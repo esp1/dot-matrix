@@ -15,24 +15,24 @@ namespace {
  * delay. A speed value of 1 corresponds to the minimum speed, or approximately
  * a 100 millisecond loop delay.
  */
-uint16_t speed_to_loop_delay_msec(long s) {
+uint16_t _speed_to_loop_delay_msec(long s) {
   auto speed = constrain(s, 1, 20);
   uint16_t loop_delay_msec = 10 + pow(20 - speed, 1.5);
   return loop_delay_msec;
 }
 
-uint8_t loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
+uint8_t _loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
   auto speed = 20 - pow(loop_delay_msec - 10, 0.6666666667);
   return constrain(speed, 1, 20);
 }
 
-String state_json(DotMatrixState *const state) {
+String _state_json(DotMatrixState *const state) {
   StaticJsonDocument<JSON_OBJECT_SIZE(2)> doc;
   doc["brightness"] = state->brightness;
   doc["speed_dir"] = state->scroll_dir == SCROLL_NONE
                          ? 0
                          : (state->scroll_dir == SCROLL_LEFT ? -1 : 1) *
-                               loop_delay_msec_to_speed(state->loop_delay_msec);
+                               _loop_delay_msec_to_speed(render::loop_delay_msec());
 
   String output = "";
   serializeJson(doc, output);
@@ -57,7 +57,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
 
   // Dot Matrix state
   server->on("/state", [state](auto *req) {
-    req->send(200, "application/json", state_json(state));
+    req->send(200, "application/json", _state_json(state));
   });
 
   // Application handlers
@@ -77,10 +77,10 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
 
       if (speed_dir < 0) {
         render::set_scroll_dir(state, SCROLL_LEFT);
-        state->loop_delay_msec = speed_to_loop_delay_msec(-speed_dir);
+        render::set_loop_delay_msec(_speed_to_loop_delay_msec(-speed_dir));
       } else if (speed_dir > 0) {
         render::set_scroll_dir(state, SCROLL_RIGHT);
-        state->loop_delay_msec = speed_to_loop_delay_msec(speed_dir);
+        render::set_loop_delay_msec(_speed_to_loop_delay_msec(speed_dir));
       } else {
         render::set_scroll_dir(state, SCROLL_NONE);
       }

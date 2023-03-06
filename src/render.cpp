@@ -5,7 +5,19 @@ namespace render {
 
 namespace {
 
-void scroll_horizontal(DotMatrixState *const state, bool scroll_left) {
+/**
+ * @brief Number of milliseconds to delay in the main loop.
+ * Adjusting this to a lower value will increase the refresh rate and
+ * scrolling speed of the display, and vice versa.
+ */
+uint16_t _loop_delay_msec = 100;
+
+/**
+ * @brief Timestamp in milliseconds of the previous display update.
+ */
+unsigned long _prev_update_msec = 0;
+
+void _scroll_horizontal(DotMatrixState *const state, bool scroll_left) {
   auto matrix = state->matrix;
   auto display_width = led_matrix::display_width(state->matrix);
   auto graphics_width = state->graphics->size();
@@ -138,11 +150,11 @@ void scroll_text(DotMatrixState *const state, String str,
 void update_display(DotMatrixState *const state) {
   switch (state->scroll_dir) {
   case SCROLL_LEFT: {
-    scroll_horizontal(state, true);
+    _scroll_horizontal(state, true);
     break;
   }
   case SCROLL_RIGHT: {
-    scroll_horizontal(state, false);
+    _scroll_horizontal(state, false);
     break;
   }
   default: {
@@ -157,6 +169,19 @@ void update_display(DotMatrixState *const state) {
 
     led_matrix::set_buffer(state->matrix, led_column, buf_size, buf);
   }
+  }
+}
+
+uint16_t loop_delay_msec() { return _loop_delay_msec; }
+
+void set_loop_delay_msec(uint16_t delay_msec) { _loop_delay_msec = delay_msec; }
+
+void loop(DotMatrixState *const state) {
+  auto current_msec = millis();
+
+  if (current_msec - _prev_update_msec > _loop_delay_msec) {
+    update_display(state);
+    _prev_update_msec = current_msec;
   }
 }
 
