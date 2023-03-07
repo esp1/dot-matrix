@@ -76,13 +76,13 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
       auto speed_dir = req->getParam("speed-dir", true)->value().toInt();
 
       if (speed_dir < 0) {
-        render::set_scroll_dir(state, SCROLL_LEFT);
+        state->scroll_dir = SCROLL_LEFT;
         render::set_loop_delay_msec(_speed_to_loop_delay_msec(-speed_dir));
       } else if (speed_dir > 0) {
-        render::set_scroll_dir(state, SCROLL_RIGHT);
+        state->scroll_dir = SCROLL_RIGHT;
         render::set_loop_delay_msec(_speed_to_loop_delay_msec(speed_dir));
       } else {
-        render::set_scroll_dir(state, SCROLL_NONE);
+        state->scroll_dir = SCROLL_NONE;
       }
 
       req->send(200, "text/plain", "OK");

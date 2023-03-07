@@ -19,38 +19,44 @@ unsigned long _prev_update_msec = 0;
 
 void _scroll_horizontal(DotMatrixState *const state, bool scroll_left) {
   auto matrix = state->matrix;
-  auto display_width = led_matrix::display_width(state->matrix);
-  auto graphics_width = state->graphics->size();
+  int16_t display_width = led_matrix::display_width(state->matrix);
+  int16_t graphics_width = state->graphics->size();
   auto graphics = *(state->graphics);
 
-  if (state->column_offset >= (int16_t)(display_width + graphics_width)) {
-    // graphics have scrolled off of the display
-    // reset the column offset to loop
-    state->column_offset = 0;
+  if (state->column_offset >= display_width) {
+    // graphics have scrolled off the right side of the display
+    // wrap graphics around to the left
+    state->column_offset = -graphics_width + 1;
+  } else if (state->column_offset < -graphics_width) {
+    // graphics have scrolled off the left side of the display
+    // wrap graphics around to the right
+    state->column_offset = display_width - 1;
   } else {
-    // shift the display
-    matrix->transform(scroll_left ? MD_MAX72XX::TSL : MD_MAX72XX::TSR);
-
-    // bring in data from the graphics buffer to fill the newly vacated column
-    // on the edge of the display
-    auto display_col = scroll_left ? 0                  // right edge
-                                   : display_width - 1; // left edge
-
-    auto graphics_idx =
-        scroll_left
-            ? state->column_offset                       // index from left
-            : graphics_width - 1 - state->column_offset; // index from right
-
-    auto col_value =
-        (graphics_idx >= 0) && (graphics_idx < graphics_width)
-            ? graphics[graphics_idx] // index within graphics buffer
-            : 0; // index outside graphics buffer (blank column)
-
-    led_matrix::set_column(matrix, display_col, col_value);
-
     // increment the column offset
-    state->column_offset++;
+    state->column_offset += scroll_left ? -1 : 1;
   }
+
+  // shift the display
+  matrix->transform(scroll_left ? MD_MAX72XX::TSL : MD_MAX72XX::TSR);
+
+  // bring in data from the graphics buffer to fill the newly vacated column
+  // on the edge of the display
+  auto display_col = scroll_left ? 0                  // right edge of display
+                                 : display_width - 1; // left edge of display
+
+  auto graphics_idx =
+      scroll_left
+          ? display_width - 1 -
+                state->column_offset // index from left edge of graphics
+                                     // buffer at right edge of display
+          : -(state->column_offset); // index from right edge of graphics
+                                     // buffer at left edge of display
+
+  auto col_value = (graphics_idx >= 0) && (graphics_idx < graphics_width)
+                       ? graphics[graphics_idx] // index within graphics buffer
+                       : 0; // index outside graphics buffer (blank column)
+
+  led_matrix::set_column(matrix, display_col, col_value);
 }
 
 } // namespace
@@ -69,55 +75,14 @@ void clear(DotMatrixState *const state) {
  * @return MatrixStateData* The adjusted matrix state data.
  */
 void align(DotMatrixState *const state, Alignment alignment) {
-  auto display_width = led_matrix::display_width(state->matrix);
-  auto graphics_width = state->graphics->size();
+  int16_t display_width = led_matrix::display_width(state->matrix);
+  int16_t graphics_width = state->graphics->size();
 
   state->column_offset =
       alignment == ALIGN_LEFT ? 0 // ALIGN_LEFT
       : alignment == ALIGN_RIGHT
           ? display_width - graphics_width          // ALIGN_RIGHT
           : 0.5 * (display_width - graphics_width); // ALIGN_CENTER
-}
-
-void set_scroll_dir(DotMatrixState *const state, ScrollDirection scroll_dir) {
-  // update column offset based on scroll direciton changes
-  if (scroll_dir == SCROLL_NONE) {
-    // changing to SCROLL_NONE
-    if (state->scroll_dir == SCROLL_LEFT) {
-      // changing from SCROLL_LEFT
-      auto display_width = led_matrix::display_width(state->matrix);
-      state->column_offset = display_width - state->column_offset;
-    } else if (state->scroll_dir == SCROLL_RIGHT) {
-      // changing from SCROLL_RIGHT
-      auto graphics_width = state->graphics->size();
-      state->column_offset = state->column_offset - graphics_width;
-    }
-  } else {
-    // changing to SCROLL_LEFT or SCROLL_RIGHT
-    if (state->scroll_dir == SCROLL_NONE) {
-      // changing from SCROLL_NONE
-      if (scroll_dir == SCROLL_LEFT) {
-        // changing to SCROLL_LEFT
-        auto display_width = led_matrix::display_width(state->matrix);
-        state->column_offset = display_width - state->column_offset;
-      } else if (scroll_dir == SCROLL_RIGHT) {
-        // changing to SCROLL_RIGHT
-        auto graphics_width = state->graphics->size();
-        state->column_offset = state->column_offset + graphics_width;
-      }
-    } else if (((state->scroll_dir == SCROLL_LEFT) &&
-                (scroll_dir == SCROLL_RIGHT)) ||
-               ((state->scroll_dir == SCROLL_RIGHT) &&
-                (scroll_dir == SCROLL_LEFT))) {
-      // changing from SCROLL_LEFT to SCROLL_RIGHT or vice versa
-      auto display_width = led_matrix::display_width(state->matrix);
-      auto graphics_width = state->graphics->size();
-      state->column_offset =
-          display_width + graphics_width - state->column_offset;
-    }
-  }
-
-  state->scroll_dir = scroll_dir;
 }
 
 void text(DotMatrixState *const state, String str, Alignment alignment) {
@@ -144,6 +109,17 @@ void text(DotMatrixState *const state, String str, Alignment alignment) {
 void scroll_text(DotMatrixState *const state, String str,
                  ScrollDirection scroll_dir) {
   text(state, str);
+
+  if (scroll_dir == SCROLL_LEFT) {
+    // position graphics buffer just outside the right edge of display
+    int16_t display_width = led_matrix::display_width(state->matrix);
+    state->column_offset = display_width;
+  } else if (scroll_dir == SCROLL_RIGHT) {
+    // position graphics buffer just outside the left edge of the display
+    int16_t graphics_width = state->graphics->size();
+    state->column_offset = -graphics_width;
+  }
+
   state->scroll_dir = scroll_dir;
 }
 
@@ -157,15 +133,15 @@ void update_display(DotMatrixState *const state) {
     _scroll_horizontal(state, false);
     break;
   }
-  default: {
-    auto display_width = led_matrix::display_width(state->matrix);
+  case SCROLL_NONE: {
+    int16_t display_width = led_matrix::display_width(state->matrix);
     auto led_column = constrain(display_width - 1 - state->column_offset, 0,
                                 display_width - 1);
 
     // trim any negative (offscreen) portion of graphics buffer
-    auto graphics_offset = state->column_offset < 0 ? -state->column_offset : 0;
-    auto buf_size = state->graphics->size() - graphics_offset;
-    auto buf = state->graphics->data() + graphics_offset;
+    auto graphics_offset = state->column_offset < 0 ? -state->column_offset :
+    0; auto buf_size = state->graphics->size() - graphics_offset; auto buf =
+    state->graphics->data() + graphics_offset;
 
     led_matrix::set_buffer(state->matrix, led_column, buf_size, buf);
   }

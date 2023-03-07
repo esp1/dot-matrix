@@ -17,12 +17,6 @@ void clear(DotMatrixState *const state);
 void align(DotMatrixState *const state, Alignment alignment);
 
 /**
- * @brief Sets the scrolling direction, updating the column offset in the state
- * appropriately if the state direction changes.
- */
-void set_scroll_dir(DotMatrixState *const state, ScrollDirection scroll_dir);
-
-/**
  * @brief Converts the string into graphics data and puts it in the state's
  * graphics buffer, and sets the column offset according to the alignment.
  */
