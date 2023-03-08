@@ -25,6 +25,8 @@
 
     <form id="matrix-text-form" class="flex justify-center items-center" onsubmit="
         postForm('/matrix-text', this)
+          .then(response => response.text())
+          .then(text => this.elements['matrix-text'].placeholder = text)
         this.reset()
         return false
       ">
@@ -52,15 +54,17 @@
               <polygon points="0,10 8,0 16,10" />
             </svg>
           </div>
-          <input name="speed-dir" type="range" class="appearance-none focus:outline-none focus:ring-2 w-full h-8 rounded-full bg-zinc-600" min="-20"
+          <input name="speed-dir" type="range"
+            class="appearance-none focus:outline-none focus:ring-2 w-full h-8 rounded-full bg-zinc-600" min="-20"
             max="20" value="-1" onclick="this.focus()" oninput="postForm('/speed-dir', this.form)" />
         </div>
       </form>
 
       <form id="brightness-form" class="mb-8 flex items-center">
         <label for="brightness" class="mr-4">brightness</label>
-        <input name="brightness" type="range" class="appearance-none focus:outline-none focus:ring-2 w-full h-8 rounded-full bg-zinc-600" min="0"
-          max="15" value="0" onclick="this.focus()" oninput="postForm('/brightness', this.form)" />
+        <input name="brightness" type="range"
+          class="appearance-none focus:outline-none focus:ring-2 w-full h-8 rounded-full bg-zinc-600" min="0" max="15"
+          value="0" onclick="this.focus()" oninput="postForm('/brightness', this.form)" />
       </form>
 
       <form id="wifi-config-form" class="flex items-center" onsubmit="
@@ -90,7 +94,8 @@
   <script>
     fetch("/state")
       .then((response) => response.json())
-      .then(({ brightness, speed_dir }) => {
+      .then(({ matrix_text, brightness, speed_dir }) => {
+        document.forms["matrix-text-form"].elements["matrix-text"].placeholder = matrix_text
         document.forms["brightness-form"].elements["brightness"].value = brightness
         document.forms["speed-dir-form"].elements["speed-dir"].value = speed_dir
       })

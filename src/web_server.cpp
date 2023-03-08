@@ -9,6 +9,11 @@ namespace web_server {
 namespace {
 
 /**
+ * @brief The text to show on the display.
+ */
+String matrix_text;
+
+/**
  * @brief Converts a given speed value to an associated loop delay in
  * milliseconds. Speed values are constrained to the range from 1 to 20. A speed
  * value of 20 corresponds to the maximum speed, or a 10 milliseconds loop
@@ -24,20 +29,6 @@ uint16_t _speed_to_loop_delay_msec(long s) {
 uint8_t _loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
   auto speed = 20 - pow(loop_delay_msec - 10, 0.6666666667);
   return constrain(speed, 1, 20);
-}
-
-String _state_json(DotMatrixState *const state) {
-  StaticJsonDocument<JSON_OBJECT_SIZE(2)> doc;
-  doc["brightness"] = state->brightness;
-  doc["speed_dir"] = state->scroll_dir == SCROLL_NONE
-                         ? 0
-                         : (state->scroll_dir == SCROLL_LEFT ? -1 : 1) *
-                               _loop_delay_msec_to_speed(render::loop_delay_msec());
-
-  String output = "";
-  serializeJson(doc, output);
-
-  return output;
 }
 
 } // namespace
@@ -57,14 +48,27 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
 
   // Dot Matrix state
   server->on("/state", [state](auto *req) {
-    req->send(200, "application/json", _state_json(state));
+    StaticJsonDocument<96> doc;
+    doc["brightness"] = state->brightness;
+    doc["speed_dir"] =
+        state->scroll_dir == SCROLL_NONE
+            ? 0
+            : (state->scroll_dir == SCROLL_LEFT ? -1 : 1) *
+                  _loop_delay_msec_to_speed(render::loop_delay_msec());
+    doc["matrix_text"] = matrix_text;
+
+    String state_json;
+    serializeJson(doc, state_json);
+
+    req->send(200, "application/json", state_json);
   });
 
   // Application handlers
   server->on("/matrix-text", [state](auto *req) {
     if (req->hasParam("matrix-text", true)) {
-      render::scroll_text(state, req->getParam("matrix-text", true)->value(), state->scroll_dir);
-      req->send(200, "text/plain", "OK");
+      matrix_text = req->getParam("matrix-text", true)->value();
+      render::scroll_text(state, matrix_text, state->scroll_dir);
+      req->send(200, "text/plain", matrix_text);
     } else {
       req->send(400, "text/plain", "Missing 'matrix-text' parameter");
     }
