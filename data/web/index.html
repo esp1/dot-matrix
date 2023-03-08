@@ -24,6 +24,7 @@
     </h1>
 
     <form id="matrix-text-form" class="flex justify-center items-center" onsubmit="
+        this.elements['matrix-text'].placeholder = ''
         postForm('/matrix-text', this)
           .then(response => response.text())
           .then(text => this.elements['matrix-text'].placeholder = text)
