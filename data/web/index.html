@@ -46,21 +46,21 @@
     <div class="pl-16 pt-14 pr-10">
       <form id="speed-dir-form" class="mb-8 flex items-center">
         <label for="speed-dir" class="mr-4">speed/direction</label>
-        <div class="relative w-full">
-          <div class="absolute bottom-0 left-0 w-full flex justify-center">
-            <svg class="w-[10px] h-[5px] object-cover fill-zinc-300">
-              <polygon points="0,5 5,0 10,5" />
+        <div class="relative inline-flex w-full">
+          <div class="absolute bottom-0 left-0 translate-y-[10px] w-full flex justify-center">
+            <svg class="w-[16px] h-[10px] object-cover fill-zinc-300">
+              <polygon points="0,10 8,0 16,10" />
             </svg>
           </div>
-          <input name="speed-dir" type="range" class="appearance-none w-full h-8 rounded-full bg-zinc-600" min="-20"
-            max="20" value="-1" oninput="postForm('/speed-dir', this.form)" />
+          <input name="speed-dir" type="range" class="appearance-none focus:outline-none focus:ring-2 w-full h-8 rounded-full bg-zinc-600" min="-20"
+            max="20" value="-1" onclick="this.focus()" oninput="postForm('/speed-dir', this.form)" />
         </div>
       </form>
 
       <form id="brightness-form" class="mb-8 flex items-center">
         <label for="brightness" class="mr-4">brightness</label>
-        <input name="brightness" type="range" class="appearance-none w-full h-8 rounded-full bg-zinc-600" min="0"
-          max="15" value="0" oninput="postForm('/brightness', this.form)" />
+        <input name="brightness" type="range" class="appearance-none focus:outline-none focus:ring-2 w-full h-8 rounded-full bg-zinc-600" min="0"
+          max="15" value="0" onclick="this.focus()" oninput="postForm('/brightness', this.form)" />
       </form>
 
       <form id="wifi-config-form" class="flex items-center" onsubmit="
