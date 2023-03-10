@@ -30,12 +30,12 @@ typedef struct DotMatrixState {
   /**
    * @brief The physical LED matrix display.
    */
-  MD_MAX72XX *matrix;
+  MD_MAX72XX *const matrix;
 
   /**
    * @brief The graphics data to be rendered.
    */
-  GraphicsBuffer *graphics;
+  GraphicsBuffer *const graphics;
 
   /**
    * @brief The scroll direction.
@@ -56,4 +56,4 @@ typedef struct DotMatrixState {
    */
   uint8_t brightness = 0;
 
-} MatrixState;
+} DotMatrixState;

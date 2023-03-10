@@ -33,21 +33,21 @@ uint8_t _loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
 
 } // namespace
 
-void setup(AsyncWebServer *const server, MatrixState *const state) {
+void setup(AsyncWebServer *const server, DotMatrixState *const state) {
   LittleFS.begin();
 
   // Static files, default file
   server->serveStatic("/", LittleFS, "/web/").setDefaultFile("index.html");
 
   // Not Found
-  server->onNotFound([](auto *req) {
+  server->onNotFound([](auto *const req) {
     if (ON_AP_FILTER(req)) {
       req->redirect("http://" + WiFi.softAPIP().toString() + "/index.html");
     }
   });
 
   // Dot Matrix state
-  server->on("/state", [state](auto *req) {
+  server->on("/state", [state](auto *const req) {
     StaticJsonDocument<96> doc;
     doc["brightness"] = state->brightness;
     doc["speed_dir"] =
@@ -64,7 +64,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
   });
 
   // Application handlers
-  server->on("/matrix-text", [state](auto *req) {
+  server->on("/matrix-text", [state](auto *const req) {
     if (req->hasParam("matrix-text", true)) {
       matrix_text = req->getParam("matrix-text", true)->value();
       render::scroll_text(state, matrix_text, state->scroll_dir);
@@ -75,7 +75,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
     req->redirect("/");
   });
 
-  server->on("/speed-dir", [state](auto *req) {
+  server->on("/speed-dir", [state](auto *const req) {
     if (req->hasParam("speed-dir", true)) {
       auto speed_dir = req->getParam("speed-dir", true)->value().toInt();
 
@@ -95,7 +95,7 @@ void setup(AsyncWebServer *const server, MatrixState *const state) {
     }
   });
 
-  server->on("/brightness", [state](auto *req) {
+  server->on("/brightness", [state](auto *const req) {
     if (req->hasParam("brightness", true)) {
       state->brightness = req->getParam("brightness", true)->value().toInt();
       led_matrix::set_brightness(state->matrix, state->brightness);

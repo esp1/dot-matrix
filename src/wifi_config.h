@@ -11,7 +11,7 @@ typedef struct WifiConfig {
 
 
 void setup();
-WifiConfig *get();
+WifiConfig *const get();
 void save(String ssid, String password);
 
 }

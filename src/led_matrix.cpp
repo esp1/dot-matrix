@@ -39,7 +39,7 @@ uint16_t display_width(MD_MAX72XX *const matrix) {
   return matrix->getColumnCount();
 }
 
-GraphicsBuffer *get_char_gfx(MD_MAX72XX *const matrix, uint16_t c) {
+GraphicsBuffer *const get_char_gfx(MD_MAX72XX *const matrix, uint16_t c) {
   auto char_width = matrix->getChar(c, matrix->getMaxFontWidth(), _char_buf);
 
   _char_gfx.clear();
@@ -51,7 +51,7 @@ GraphicsBuffer *get_char_gfx(MD_MAX72XX *const matrix, uint16_t c) {
 
 // control functions
 
-void clear(MD_MAX72XX *matrix) { matrix->clear(); }
+void clear(MD_MAX72XX *const matrix) { matrix->clear(); }
 
 void set_brightness(MD_MAX72XX *const matrix, int intensity) {
   matrix->control(MD_MAX72XX::INTENSITY, intensity);
@@ -62,7 +62,7 @@ void set_column(MD_MAX72XX *const matrix, uint16_t column, uint8_t value) {
 }
 
 void set_buffer(MD_MAX72XX *const matrix, uint16_t column, uint8_t buf_size,
-                uint8_t *buf) {
+                uint8_t *const buf) {
   matrix->setBuffer(column, buf_size, buf);
 }
 

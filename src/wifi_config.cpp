@@ -16,7 +16,7 @@ void setup() {
   //               eeprom_wifi_config.ssid, eeprom_wifi_config.password);
 }
 
-WifiConfig *get() { return &_eeprom_wifi_config; }
+WifiConfig *const get() { return &_eeprom_wifi_config; }
 
 void save(String ssid, String password) {
   if ((strcmp(ssid.c_str(), _eeprom_wifi_config.ssid) != 0) ||

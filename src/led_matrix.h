@@ -12,7 +12,7 @@ void setup(MD_MAX72XX *const matrix);
 
 uint8_t num_modules(MD_MAX72XX *const matrix);
 uint16_t display_width(MD_MAX72XX *const matrix);
-GraphicsBuffer *get_char_gfx(MD_MAX72XX *const matrix, uint16_t c);
+GraphicsBuffer *const get_char_gfx(MD_MAX72XX *const matrix, uint16_t c);
 
 // control functions
 
@@ -39,6 +39,6 @@ void set_column(MD_MAX72XX *const matrix, uint16_t column, uint8_t value);
  * @brief Displays the contents of the graphics buffer on the LED display.
  */
 void set_buffer(MD_MAX72XX *const matrix, uint16_t column, uint8_t buf_size,
-                uint8_t *buf);
+                uint8_t *const buf);
 
 } // namespace led_matrix

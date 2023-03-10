@@ -56,7 +56,7 @@ void setup(AsyncWebServer *const server) {
   _ssid = wifi_config->ssid;
   _password = wifi_config->password;
 
-  server->on("/wifi-config", [](auto *req) {
+  server->on("/wifi-config", [](auto *const req) {
     _wifi_connected = false;
 
     if (req->hasParam("wifi-ssid", true) &&
@@ -71,7 +71,7 @@ void setup(AsyncWebServer *const server) {
   });
 }
 
-void loop(MatrixState *const state) {
+void loop(DotMatrixState *const state) {
   if (!_wifi_connected) {
     if (WiFi.isConnected()) {
       Serial.println("Disconnecting from '" + WiFi.SSID() + "'");
