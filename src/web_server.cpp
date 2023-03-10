@@ -4,8 +4,6 @@
 #include "render.h"
 #include <LittleFS.h>
 
-namespace web_server {
-
 namespace {
 
 /**
@@ -32,6 +30,8 @@ uint8_t _loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
 }
 
 } // namespace
+
+namespace web_server {
 
 void setup(AsyncWebServer *const server, DotMatrixState *const state) {
   LittleFS.begin();

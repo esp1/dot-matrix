@@ -1,8 +1,6 @@
 #include "render.h"
 #include "led_matrix.h"
 
-namespace render {
-
 namespace {
 
 /**
@@ -60,6 +58,8 @@ void _scroll_horizontal(DotMatrixState *const state, bool scroll_left) {
 }
 
 } // namespace
+
+namespace render {
 
 void clear(DotMatrixState *const state) {
   state->matrix->clear();

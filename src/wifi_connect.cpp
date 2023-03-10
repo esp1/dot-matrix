@@ -10,8 +10,6 @@
 #include <ESPAsyncTCP.h>
 #include <LittleFS.h>
 
-namespace wifi_connect {
-
 namespace {
 
 bool _wifi_connected = false;
@@ -49,6 +47,8 @@ void _connect_wifi(DotMatrixState *const state) {
 }
 
 } // namespace
+
+namespace wifi_connect {
 
 void setup(AsyncWebServer *const server) {
   wifi_config::setup();

@@ -1,7 +1,5 @@
 #include "led_matrix.h"
 
-namespace led_matrix {
-
 namespace {
 
 /**
@@ -16,6 +14,8 @@ uint8_t *_char_buf;
 GraphicsBuffer _char_gfx;
 
 } // namespace
+
+namespace led_matrix {
 
 void setup(MD_MAX72XX *const matrix) {
   matrix->begin();

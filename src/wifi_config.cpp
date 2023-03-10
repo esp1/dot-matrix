@@ -1,13 +1,13 @@
 #include "wifi_config.h"
 #include <EEPROM.h>
 
-namespace wifi_config {
-
 namespace {
 
-WifiConfig _eeprom_wifi_config;
+wifi_config::WifiConfig _eeprom_wifi_config;
 
 } // namespace
+
+namespace wifi_config {
 
 void setup() {
   EEPROM.begin(512);
