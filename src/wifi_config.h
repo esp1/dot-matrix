@@ -9,7 +9,6 @@ typedef struct WifiConfig {
   char password[256];
 } WifiConfig;
 
-
 void setup();
 WifiConfig *const get();
 void save(String ssid, String password);

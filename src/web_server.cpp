@@ -98,7 +98,7 @@ void setup(AsyncWebServer *const server, DotMatrixState *const state) {
   server->on("/brightness", [state](auto *const req) {
     if (req->hasParam("brightness", true)) {
       state->brightness = req->getParam("brightness", true)->value().toInt();
-      led_matrix::set_brightness(state->matrix, state->brightness);
+      state->matrix->control(MD_MAX72XX::INTENSITY, state->brightness);
       req->send(200, "text/plain", "OK");
     } else {
       req->send(400, "text/plain", "Missing 'brightness' parameter");
