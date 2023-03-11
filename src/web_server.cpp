@@ -24,9 +24,24 @@ uint16_t _speed_to_loop_delay_msec(long s) {
   return loop_delay_msec;
 }
 
+/**
+ * @brief Converts a loop delay time in milliseconds to a speed value in the
+ * range from 1 to 20.
+ */
 uint8_t _loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
   auto speed = 20 - pow(loop_delay_msec - 10, 0.6666666667);
   return constrain(speed, 1, 20);
+}
+
+/**
+ * @brief Extrapolates the UI speed/direction value from the scroll direction
+ * and loop delay values in the state.
+ */
+uint8_t speed_dir(DotMatrixState *state) {
+  return (state->scroll_dir == SCROLL_NONE)
+             ? 0
+             : (state->scroll_dir == SCROLL_LEFT ? -1 : 1) *
+                   _loop_delay_msec_to_speed(render::loop_delay_msec());
 }
 
 } // namespace
@@ -48,19 +63,15 @@ void setup(AsyncWebServer *const server, DotMatrixState *const state) {
 
   // Dot Matrix state
   server->on("/state", [state](auto *const req) {
-    StaticJsonDocument<96> doc;
-    doc["brightness"] = state->brightness;
-    doc["speed_dir"] =
-        state->scroll_dir == SCROLL_NONE
-            ? 0
-            : (state->scroll_dir == SCROLL_LEFT ? -1 : 1) *
-                  _loop_delay_msec_to_speed(render::loop_delay_msec());
-    doc["matrix_text"] = matrix_text;
+    StaticJsonDocument<96> json_doc;
+    json_doc["brightness"] = state->brightness;
+    json_doc["speed_dir"] = speed_dir(state);
+    json_doc["matrix_text"] = matrix_text;
 
-    String state_json;
-    serializeJson(doc, state_json);
+    String json_str;
+    serializeJson(json_doc, json_str);
 
-    req->send(200, "application/json", state_json);
+    req->send(200, "application/json", json_str);
   });
 
   // Application handlers
