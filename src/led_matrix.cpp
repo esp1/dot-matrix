@@ -27,7 +27,7 @@ void setup(MD_MAX72XX *const matrix) {
   matrix->control(MD_MAX72XX::INTENSITY, 0);
 }
 
-GraphicsBuffer *const get_char_gfx(MD_MAX72XX *const matrix, uint16_t c) {
+GraphicsBuffer *const char_gfx(MD_MAX72XX *const matrix, uint16_t c) {
   auto char_width = matrix->getChar(c, matrix->getMaxFontWidth(), _char_buf);
 
   _char_gfx.clear();

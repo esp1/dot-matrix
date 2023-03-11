@@ -6,6 +6,6 @@ namespace led_matrix {
 
 void setup(MD_MAX72XX *const matrix);
 
-GraphicsBuffer *const get_char_gfx(MD_MAX72XX *const matrix, uint16_t c);
+GraphicsBuffer *const char_gfx(MD_MAX72XX *const matrix, uint16_t c);
 
 } // namespace led_matrix

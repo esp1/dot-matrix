@@ -99,7 +99,7 @@ void text(DotMatrixState *const state, String str, Alignment alignment) {
     }
 
     auto c = str.charAt(i);
-    auto char_cols = led_matrix::get_char_gfx(state->matrix, c);
+    auto char_cols = led_matrix::char_gfx(state->matrix, c);
     graphics->insert(graphics->end(), char_cols->begin(), char_cols->end());
   }
 
