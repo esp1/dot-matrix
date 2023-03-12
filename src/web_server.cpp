@@ -37,7 +37,7 @@ uint8_t _loop_delay_msec_to_speed(uint16_t loop_delay_msec) {
  * @brief Extrapolates the UI speed/direction value from the scroll direction
  * and loop delay values in the state.
  */
-uint8_t speed_dir(DotMatrixState *state) {
+int8_t speed_dir(DotMatrixState *state) {
   return (state->scroll_dir == SCROLL_NONE)
              ? 0
              : (state->scroll_dir == SCROLL_LEFT ? -1 : 1) *
