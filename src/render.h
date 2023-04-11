@@ -11,8 +11,10 @@ namespace render {
 void clear(DotMatrixState *const state);
 
 /**
- * @brief Updates the column offset in the state according to the requested
- * graphics alignment.
+ * @brief Adjusts a Graphics object so that it will be aligned in the specified
+ * manner on the display.
+ *
+ * @param alignment How the provided graphics should be aligned to the display.
  */
 void align(DotMatrixState *const state, Alignment alignment);
 

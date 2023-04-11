@@ -67,13 +67,6 @@ void clear(DotMatrixState *const state) {
   state->scroll_dir = SCROLL_NONE;
 }
 
-/**
- * @brief Adjusts a Graphics object so that it will be aligned in the specified
- * manner on the display.
- *
- * @param align How the provided graphics should be aligned to the display.
- * @return MatrixStateData* The adjusted matrix state data.
- */
 void align(DotMatrixState *const state, Alignment alignment) {
   int16_t display_width = state->matrix->getColumnCount();
   int16_t graphics_width = state->graphics->size();
@@ -139,9 +132,9 @@ void update_display(DotMatrixState *const state) {
                                 display_width - 1);
 
     // trim any negative (offscreen) portion of graphics buffer
-    auto graphics_offset = state->column_offset < 0 ? -state->column_offset :
-    0; auto buf_size = state->graphics->size() - graphics_offset; auto buf =
-    state->graphics->data() + graphics_offset;
+    auto graphics_offset = state->column_offset < 0 ? -state->column_offset : 0;
+    auto buf_size = state->graphics->size() - graphics_offset;
+    auto buf = state->graphics->data() + graphics_offset;
 
     state->matrix->setBuffer(led_column, buf_size, buf);
   }
