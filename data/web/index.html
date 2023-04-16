@@ -24,10 +24,9 @@
     </h1>
 
     <form id="matrix-text-form" class="flex justify-center items-center" onsubmit="
-        this.elements['matrix-text'].placeholder = ''
         postForm('/matrix-text', this)
           .then(response => response.text())
-          .then(text => this.elements['matrix-text'].placeholder = text)
+          .then(text => this.elements['matrix-text'].value = text)
         this.reset()
         return false
       ">
@@ -96,7 +95,7 @@
     fetch("/state")
       .then((response) => response.json())
       .then(({ matrix_text, brightness, speed_dir }) => {
-        document.forms["matrix-text-form"].elements["matrix-text"].placeholder = matrix_text
+        document.forms["matrix-text-form"].elements["matrix-text"].value = matrix_text
         document.forms["brightness-form"].elements["brightness"].value = brightness
         document.forms["speed-dir-form"].elements["speed-dir"].value = speed_dir
       })
