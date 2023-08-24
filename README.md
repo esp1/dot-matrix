@@ -8,7 +8,7 @@
 -   5 female-female jumper wires
 
 ## Software
--   [VS Code](https://code.visualstudio.com/ "https://code.visualstudio.com/"
+-   [VS Code](https://code.visualstudio.com/)
 -   [PlatformIO VS Code extension](https://platformio.org/install/ide?install=vscode "https://platformio.org/install/ide?install=vscode")
 
 ---
